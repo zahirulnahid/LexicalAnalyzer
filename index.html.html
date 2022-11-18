@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>Lexical Analyzer for simple C statement</h2>
+
+<textarea id="myTextarea" name="myTextarea"  oninput="parse()" rows="4" cols="50"></textarea>
+
+<p id="demo"></p>
+
+<script>
+function subString(line) {
+ myArray =line.split(" ");
+  return myArray;
+}
+function strcmp(str1,str2)
+{
+if(str1.localeCompare(str2)!=0)return true;else return false;
+}
+function isDelimiter(ch)
+{
+	if (ch == ' ' || ch == '+' || ch == '-' || ch == '*' ||
+		ch == '/' || ch == ',' || ch == ';' || ch == '>' ||
+		ch == '<' || ch == '=' || ch == '(' || ch == ')' ||
+		ch == '[' || ch == ']' || ch == '{' || ch == '}')
+		return (true);
+	return (false);
+}
+function validIdentifier(str)
+{
+	if (str[0] == '0' || str[0] == '1' || str[0] == '2' ||
+		str[0] == '3' || str[0] == '4' || str[0] == '5' ||
+		str[0] == '6' || str[0] == '7' || str[0] == '8' ||
+		str[0] == '9' || isDelimiter(str[0]) == true)
+		return (false);
+	return (true);
+}
+
+function isOperator(ch)
+{
+	if (ch == '+' || ch == '-' || ch == '*' ||
+		ch == '/' || ch == '>' || ch == '<' ||
+		ch == '=')
+		return (true);
+	return (false);
+}
+
+function isRealNumber(str)
+{
+    var i, len = str.length;
+    var hasDecimal = false;
+ 
+    if (len == 0)
+        return (false);
+    for (i = 0; i < len; i++) {
+        if (str[i] != '0' && str[i] != '1' && str[i] != '2'
+            && str[i] != '3' && str[i] != '4' && str[i] != '5'
+            && str[i] != '6' && str[i] != '7' && str[i] != '8'
+            && str[i] != '9' && str[i] != '.' ||
+            (str[i] == '-' && i > 0))
+            return (false);
+        if (str[i] == '.')
+            hasDecimal = true;
+    }
+    return (hasDecimal);
+}
+
+function isInteger(str)
+{
+	var len = str.length;
+	
+
+	if (len == 0)
+		return (false);
+	for (i = 0; i < len; i++) {
+		if (str[i] != '0' && str[i] != '1' && str[i] != '2'
+			&& str[i] != '3' && str[i] != '4' && str[i] != '5'
+			&& str[i] != '6' && str[i] != '7' && str[i] != '8'
+			&& str[i] != '9' || (str[i] == '-' && i > 0))
+			return (false);
+	}
+	return (true);
+}
+
+function isKeyword(str)
+{ 
+	if (!strcmp(str, "if") || !strcmp(str, "else") ||
+		!strcmp(str, "while") || !strcmp(str, "do") ||
+		!strcmp(str, "break") ||
+		!strcmp(str, "continue") || !strcmp(str, "int")
+		|| !strcmp(str, "double") || !strcmp(str, "float")
+		|| !strcmp(str, "return") || !strcmp(str, "char")
+		|| !strcmp(str, "case") || !strcmp(str, "char")
+		|| !strcmp(str, "sizeof") || !strcmp(str, "long")
+		|| !strcmp(str, "short") || !strcmp(str, "typedef")
+		|| !strcmp(str, "switch") || !strcmp(str, "unsigned")
+		|| !strcmp(str, "void") || !strcmp(str, "static")
+		|| !strcmp(str, "struct") || !strcmp(str, "goto"))
+		return (true);
+	return (false);
+}
+var strs;let text = "";
+function parse()
+{var str=document.getElementById("myTextarea").value;text = "";
+    if(str[str.length-1]==';')str=str.replace(';'," ;");
+	subString(str).forEach(myFunction);	
+	
+	document.getElementById("demo").innerHTML=text;
+}
+
+function myFunction(subStr, index) {
+
+
+            if (isKeyword(subStr) == true)
+			  text += index + ": " + subStr + " IS A KEYWORD<br>"; 
+            else if (isInteger(subStr) == true)
+                text += index + ": " + subStr + " IS AN INTEGER<br>"; 
+ 
+            else if (isRealNumber(subStr) == true)
+                text += index + ": " + subStr + " IS A REAL NUMBER<br>"; 
+				
+            else if (isOperator(subStr) == true)
+                text += index + ": " + subStr + " IS An Operator<br>"; 				
+ 
+            else if (validIdentifier(subStr) == true
+                     && isDelimiter(subStr[0]) == false)
+                text += index + ": " + subStr + " IS A VALID IDENTIFIER<br>"; 
+ 
+            else if (validIdentifier(subStr) == false
+                     && isDelimiter(subStr[subStr.length-1]) == false)
+                text += index + ": " + subStr + " IS NOT A VALID IDENTIFIER<br>"; 
+else if (subStr == ";")
+                text += index + ": " + subStr + " IS Semicolon<br>";				
+}
+
+</script>
+
+</body>
+</html>
